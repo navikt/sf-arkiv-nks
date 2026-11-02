@@ -49,7 +49,7 @@ class Application(
 
     fun start() {
         log.info {
-            "Starting ${if (isDev) "DEV" else "PROD"}, dev test bypass allowed: $isDevTestBypassAllowed, hente allowed:" +
+            "Starting ${if (isDev) "DEV" else "PROD"}, test bypass allowed: $isDevTestBypassAllowed, hente allowed:" +
                 " $isHenteAllowed, db init Allowed $isDbInitAllowed, dummy read to test readiness $isDummyReadToTestReadiness"
         }
 
