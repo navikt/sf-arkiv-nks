@@ -10,6 +10,5 @@ data class HenteResponse(
     val dokumentdato: String,
     val aktoerid: String,
     val fnr: String,
-    val orgnr: String,
     val tema: String,
 )

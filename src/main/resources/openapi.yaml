@@ -120,9 +120,6 @@ components:
         fnr:
           type: string
           maxLength: 13
-        orgnr:
-          type: string
-          maxLength: 13
         tema:
           type: string
           maxLength: 50
@@ -177,9 +174,6 @@ components:
         fnr:
           type: string
           default: ""
-        orgnr:
-          type: string
-          default: ""
         tema:
           type: string
           default: ""
@@ -205,8 +199,6 @@ components:
         aktoerid:
           type: string
         fnr:
-          type: string
-        orgnr:
           type: string
         tema:
           type: string

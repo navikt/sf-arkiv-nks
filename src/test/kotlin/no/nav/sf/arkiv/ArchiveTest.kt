@@ -60,7 +60,6 @@ class ArchiveTest {
                     dokumentdato = "2026-10-20",
                     aktoerid = "123",
                     fnr = "456",
-                    orgnr = "789",
                     tema = "IPS",
                     konfidentiellt = true,
                 ),
@@ -81,7 +80,7 @@ class ArchiveTest {
         assertTrue(results[0].konfidentiellt)
         assertFalse(results[1].konfidentiellt)
         assertTrue(results[0].dato.isNotEmpty())
-        for (identifying in listOf("aktoerid", "fnr", "orgnr", "tema")) {
+        for (identifying in listOf("aktoerid", "fnr", "tema")) {
             assertFalse(identifying, response.bodyString().contains("\"$identifying\""))
         }
 
@@ -92,9 +91,15 @@ class ArchiveTest {
         assertEquals(document, stored[ArkivTable.dokumentasjon])
         assertEquals(items[0].aktoerid, stored[ArkivTable.aktoerid])
         assertEquals(items[0].fnr, stored[ArkivTable.fnr])
-        assertEquals(items[0].orgnr, stored[ArkivTable.orgnr])
         assertEquals(items[0].tema, stored[ArkivTable.tema])
         assertTrue(stored[ArkivTable.konfidentiellt])
+    }
+
+    @Test
+    fun `archive schema and request models do not include orgnr`() {
+        assertFalse(ArkivTable.columns.any { it.name == "orgnr" })
+        assertFalse(gson.toJson(Arkiv()).contains("\"orgnr\""))
+        assertFalse(gson.toJson(Hente()).contains("\"orgnr\""))
     }
 
     @Test
@@ -227,6 +232,7 @@ class ArchiveTest {
         assertEquals(1, results.size)
         assertEquals("one", results.single().kilde)
         assertEquals("IPS", results.single().tema)
+        assertFalse(response.bodyString().contains("\"orgnr\""))
     }
 
     @Test
@@ -276,6 +282,7 @@ class ArchiveTest {
         val spec = api(Request(Method.GET, "/internal/openapi.yaml"))
         assertEquals(Status.OK, spec.status)
         assertTrue(spec.bodyString().startsWith("openapi: 3.0.1"))
+        assertFalse(spec.bodyString().contains("orgnr"))
         for (path in listOf("/arkiv:", "/hente:", "/authping:")) {
             assertTrue(path, spec.bodyString().contains(path))
         }

@@ -38,7 +38,6 @@ object ArkivTable : Table("arkiv") {
     val dokumentdato = datetime("dokumentdato")
     val aktoerid = varchar("aktoerid", 14).index()
     val fnr = varchar("fnr", 13).index()
-    val orgnr = varchar("orgnr", 13).index()
     val tema = varchar("tema", 50)
     val konfidentiellt = bool("konfidentiellt")
 }
@@ -52,7 +51,6 @@ fun Arkiv.tooLongFields(): List<String> =
         Triple("dokumentasjonId", dokumentasjonId, ArkivTable.dokumentasjonId),
         Triple("aktoerid", aktoerid, ArkivTable.aktoerid),
         Triple("fnr", fnr, ArkivTable.fnr),
-        Triple("orgnr", orgnr, ArkivTable.orgnr),
         Triple("tema", tema, ArkivTable.tema),
     ).filter { (_, value, column) -> value.length > column.maxLength() }
         .map { (name, _, column) -> "$name (max ${column.maxLength()} characters)" }
@@ -70,7 +68,6 @@ fun ArkivTable.insert(item: Arkiv): ArkivResponse {
             it[dokumentdato] = documentDate
             it[aktoerid] = item.aktoerid
             it[fnr] = item.fnr
-            it[orgnr] = item.orgnr
             it[tema] = item.tema
             it[konfidentiellt] = item.konfidentiellt
         }
@@ -94,7 +91,6 @@ fun ArkivTable.select(filter: Hente): Query =
         if (filter.dokumentdato.isNotEmpty()) andWhere { dokumentdato eq DateTime.parse(filter.dokumentdato, fmt_onlyDay) }
         if (filter.aktoerid.isNotEmpty()) andWhere { aktoerid eq filter.aktoerid }
         if (filter.fnr.isNotEmpty()) andWhere { fnr eq filter.fnr }
-        if (filter.orgnr.isNotEmpty()) andWhere { orgnr eq filter.orgnr }
         if (filter.tema.isNotEmpty()) andWhere { tema eq filter.tema }
     }
 
@@ -109,6 +105,5 @@ fun ResultRow.toHenteResponse(): HenteResponse =
         dokumentdato = fmt_onlyDay.print(this[ArkivTable.dokumentdato]),
         aktoerid = this[ArkivTable.aktoerid],
         fnr = this[ArkivTable.fnr],
-        orgnr = this[ArkivTable.orgnr],
         tema = this[ArkivTable.tema],
     )

@@ -8,7 +8,6 @@ data class Arkiv(
     var dokumentdato: String = "",
     var aktoerid: String = "",
     var fnr: String = "",
-    var orgnr: String = "",
     var tema: String = "",
     var konfidentiellt: Boolean = false,
 )
